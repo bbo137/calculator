@@ -1,3 +1,7 @@
+let accumulator = 0;
+let screenNumber = 0;
+
+
 function display(input) {
   const output = document.querySelector(".output");
   output.textContent = input;
@@ -34,7 +38,12 @@ function operate(opperator, a, b) {
 function input() {
   const operands = document.querySelectorAll(".operand");
   operands.forEach((operand) =>
-    operand.addEventListener("click", () => display(operand.textContent))
+    operand.addEventListener("click", () => {
+        screenNumber === 0 
+        ? screenNumber = Number(operand.textContent)
+        :screenNumber+= operand.textContent;
+        display(screenNumber);
+    })
   );
 }
 
