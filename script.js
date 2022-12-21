@@ -1,10 +1,44 @@
-function display(input){
-    const output = document.querySelector('.output');
-    output.textContent = input;
+function display(input) {
+  const output = document.querySelector(".output");
+  output.textContent = input;
 }
 
-display(4);
+const add = (a, b) => a + b;
 
+const subtract = (a, b) => a - b;
+
+const multiply = (a, b) => a * b;
+
+const divide = (a, b) => a / b;
+
+function operate(opperator, a, b) {
+  switch (opperator) {
+    case "+":
+      add(a, b);
+      break;
+    case "-":
+      subtract(a, b);
+      break;
+    case "×":
+      multiply(a, b);
+      break;
+    case "÷":
+      divide(a, b);
+      break;
+
+    default:
+      break;
+  }
+}
+
+function input() {
+  const operands = document.querySelectorAll(".operand");
+  operands.forEach((operand) =>
+    operand.addEventListener("click", () => display(operand.textContent))
+  );
+}
+
+input(8);
 
 /*     currentInput = Number(output['textContent']);
     (currentInput === 0) 
