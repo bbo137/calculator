@@ -5,10 +5,8 @@ firstPass = false;
 nextOperator = "+";
 
 function display(input) {
-  console.log({input})
   const output = document.querySelector(".output");
   outputLen = input.toString().length
-  console.log(outputLen)
   if(outputLen > 9){
     if(input >= 10e99 || input <= 10e-9){
       input = Number(input).toPrecision(4);
@@ -21,31 +19,6 @@ function display(input) {
     }
   }
   output.textContent = input;
-
-
-
-
-/*   if(input.toString().includes('.')){
-    presicion = input.toString().indexOf('.');
-    presicion = input.toString().length //- presicion;
-    console.log({presicion})
-    if(presicion == 1){
-      output.textContent = input;
-      console.log(output.textContent);
-      console.log('t1');
-      return;
-    }
-
-    if(presicion >= 9) presicion = 9;
-    output.textContent = Number(input).toPrecision(presicion);
-    console.log(output.textContent);
-    console.log('t2');
-    return;
-  }else{
-    output.textContent = input;
-    console.log(output.textContent);
-    console.log('t3');
-  }  */
 }
 
 const add = (a, b) => +a + +b;
@@ -135,9 +108,7 @@ function operator() {
         return;
       }
       operate(nextOperator, accumulator, output);
-      //output = accumulator;
       display(output);
-      //output = 0;
       nextOperator = operator.textContent;
       firstPass = false;
     })
