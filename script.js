@@ -1,11 +1,51 @@
+var output = document.querySelector(".output").textContent;
 let accumulator = "0";
-let screenNumber = 0;
+let aux = 0;
 firstPass = false;
-nextOperator = '+';
+nextOperator = "+";
 
 function display(input) {
+  console.log({input})
   const output = document.querySelector(".output");
+  outputLen = input.toString().length
+  console.log(outputLen)
+  if(outputLen > 9){
+    if(input >= 10e99 || input <= 10e-9){
+      input = Number(input).toPrecision(4);
+    }else if(input >= 10e9 || input <= -10e-9){
+      input = Number(input).toPrecision(4);
+    }else if(input >= 10e8 || input <= -10e-8){
+      input = Number(input).toPrecision(5);
+    }else{
+      input = Number(input).toPrecision(9);
+    }
+  }
   output.textContent = input;
+
+
+
+
+/*   if(input.toString().includes('.')){
+    presicion = input.toString().indexOf('.');
+    presicion = input.toString().length //- presicion;
+    console.log({presicion})
+    if(presicion == 1){
+      output.textContent = input;
+      console.log(output.textContent);
+      console.log('t1');
+      return;
+    }
+
+    if(presicion >= 9) presicion = 9;
+    output.textContent = Number(input).toPrecision(presicion);
+    console.log(output.textContent);
+    console.log('t2');
+    return;
+  }else{
+    output.textContent = input;
+    console.log(output.textContent);
+    console.log('t3');
+  }  */
 }
 
 const add = (a, b) => +a + +b;
@@ -14,28 +54,28 @@ const subtract = (a, b) => a - b;
 
 const multiply = (a, b) => a * b;
 
-const divide = (a, b) => (a / b);
+const divide = (a, b) => a / b;
 
 function operate(opperator, a, b) {
   switch (opperator) {
     case "+":
       accumulator = add(a, b);
-      screenNumber = accumulator;
+      output = accumulator;
 
       break;
     case "-":
       accumulator = subtract(a, b);
-      screenNumber = accumulator;
+      output = accumulator;
       break;
     case "×":
       !firstPass, () => (a = 1);
       accumulator = multiply(a, b);
-      screenNumber = accumulator;
+      output = accumulator;
       break;
     case "÷":
       !firstPass, () => (a = 1);
       accumulator = divide(a, b);
-      screenNumber = accumulator;
+      output = accumulator;
       break;
 
     default:
@@ -47,11 +87,11 @@ function input() {
   const operands = document.querySelectorAll(".operand");
   operands.forEach((operand) =>
     operand.addEventListener("click", () => {
-      if (screenNumber.length >= 9) return;
-      screenNumber === 0
-        ? (screenNumber = Number(operand.textContent))
-        : (screenNumber += operand.textContent);
-      display(screenNumber);
+      if (output.length >= 9) return;
+      ((output == 0 && !output.toString().includes('.')) || output == accumulator)
+        ? (output = Number(operand.textContent))
+        : (output += operand.textContent);
+      display(output);
     })
   );
 }
@@ -59,24 +99,27 @@ function input() {
 function clear() {
   const clear = document.querySelector(".clear");
   clear.addEventListener("click", () => {
-    accumulator = 0;
-    screenNumber = 0;
-    firstPass = true;
-    nextOperator = '+'
-    display(0);
+    reset()
+    display(output);
   });
+}
+
+function reset(){
+  accumulator = 0;
+  output = 0;
+  firstPass = true;
+  nextOperator = "+";
 }
 
 function del() {
   const del = document.querySelector(".back");
   del.addEventListener("click", () => {
-    const output = document.querySelector(".output");
-    if (output.textContent.length <= 1) {
-      screenNumber = 0;
+    if (output.length <= 1) {
+      output = 0;
     } else {
-      screenNumber = output.textContent.toString().slice(0, -1);
+      output = output.toString().slice(0, -1);
     }
-    display(screenNumber);
+    display(output);
   });
 }
 
@@ -84,27 +127,38 @@ function operator() {
   const operators = document.querySelectorAll(".operator");
   operators.forEach((operator) =>
     operator.addEventListener("click", () => {
-      const output = document.querySelector(".output");
-      current = output.textContent.toString();
-      if(operator.textContent == '÷' && current == 0){
-        display('lmao');
+      operator.setAttribute("style", "background-color: red");
+      output = output.toString();
+      if (nextOperator == "÷" && output == 0) {
+        display("lmao");
+        reset();
         return;
       }
-      operate(nextOperator, accumulator, current);
-      screenNumber = accumulator;
-      display(screenNumber);
+      operate(nextOperator, accumulator, output);
+      //output = accumulator;
+      display(output);
+      //output = 0;
       nextOperator = operator.textContent;
       firstPass = false;
-      screenNumber = 0;
     })
   );
 }
 
-input(8);
+function decimal(){
+  const decimal = document.querySelector('.decimal');
+  decimal.addEventListener('click', () => {
+    if(!output.toString().includes('.')){
+      output+= '.';
+      display(output);
+    }
+  })
+}
+
+input();
 clear();
 del();
 operator();
-
+decimal();
 
 /*     currentInput = Number(output['textContent']);
     (currentInput === 0) 
