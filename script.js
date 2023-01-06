@@ -6,15 +6,15 @@ nextOperator = "+";
 
 function display(input) {
   const output = document.querySelector(".output");
-  outputLen = input.toString().length
-  if(outputLen > 9){
-    if(input >= 10e99 || input <= 10e-9){
+  outputLen = input.toString().length;
+  if (outputLen > 9) {
+    if (input >= 10e99 || input <= 10e-9) {
       input = Number(input).toPrecision(4);
-    }else if(input >= 10e9 || input <= -10e-9){
+    } else if (input >= 10e9 || input <= -10e-9) {
       input = Number(input).toPrecision(4);
-    }else if(input >= 10e8 || input <= -10e-8){
+    } else if (input >= 10e8 || input <= -10e-8) {
       input = Number(input).toPrecision(5);
-    }else{
+    } else {
       input = Number(input).toPrecision(9);
     }
   }
@@ -61,7 +61,7 @@ function input() {
   operands.forEach((operand) =>
     operand.addEventListener("click", () => {
       if (output.length >= 9) return;
-      ((output == 0 && !output.toString().includes('.')) || output == accumulator)
+      (output == 0 && !output.toString().includes(".")) || output == accumulator
         ? (output = Number(operand.textContent))
         : (output += operand.textContent);
       display(output);
@@ -72,12 +72,12 @@ function input() {
 function clear() {
   const clear = document.querySelector(".clear");
   clear.addEventListener("click", () => {
-    reset()
+    reset();
     display(output);
   });
 }
 
-function reset(){
+function reset() {
   accumulator = 0;
   output = 0;
   firstPass = true;
@@ -98,31 +98,49 @@ function del() {
 
 function operator() {
   const operators = document.querySelectorAll(".operator");
-  operators.forEach((operator) =>
+  window.addEventListener('keydown', function(e){
+    if(!e.shiftKey && (e.keyCode === 55)){
+      return
+    }
+    if(!e.shiftKey && (e.keyCode === 187)){
+      const operator = document.querySelector('.sum');
+    }else{
+      const operator1 = document.querySelector('.operator[data-key-num="'+e.keyCode+'"]');
+      const operator2= document.querySelector('.operator[data-key="'+e.keyCode+'"]');
+      const operator = operator1 || operator2
+    }
+    executeFunction(operator);
+  });
+
+  operators.forEach((operator) => {
     operator.addEventListener("click", () => {
-      operator.setAttribute("style", "background-color: red");
-      output = output.toString();
-      if (nextOperator == "÷" && output == 0) {
-        display("lmao");
-        reset();
-        return;
-      }
-      operate(nextOperator, accumulator, output);
-      display(output);
-      nextOperator = operator.textContent;
-      firstPass = false;
-    })
-  );
+      console.log("click");
+      executeFunction(operator);
+    });
+  });
+  const executeFunction = (operator) => {
+    operator.setAttribute("style", "background-color: red");
+    output = output.toString();
+    if (nextOperator == "÷" && output == 0) {
+      display("lmao");
+      reset();
+      return;
+    }
+    operate(nextOperator, accumulator, output);
+    display(output);
+    nextOperator = operator.textContent;
+    firstPass = false;
+  };
 }
 
-function decimal(){
-  const decimal = document.querySelector('.decimal');
-  decimal.addEventListener('click', () => {
-    if(!output.toString().includes('.')){
-      output+= '.';
+function decimal() {
+  const decimal = document.querySelector(".decimal");
+  decimal.addEventListener("click", () => {
+    if (!output.toString().includes(".")) {
+      output += ".";
       display(output);
     }
-  })
+  });
 }
 
 input();
