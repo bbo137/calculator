@@ -99,17 +99,9 @@ function del() {
 function operator() {
   const operators = document.querySelectorAll(".operator");
   window.addEventListener('keydown', function(e){
-    if(!e.shiftKey && (e.keyCode === 55)){
-      return
-    }
-    if(!e.shiftKey && (e.keyCode === 187)){
-      const operator = document.querySelector('.sum');
-    }else{
-      const operator1 = document.querySelector('.operator[data-key-num="'+e.keyCode+'"]');
-      const operator2= document.querySelector('.operator[data-key="'+e.keyCode+'"]');
-      const operator = operator1 || operator2
-    }
-    executeFunction(operator);
+    const operator= document.querySelector('.operator[data-key="'+e.key+'"]');
+    console.log({operator})
+    if(operator) executeFunction(operator);
   });
 
   operators.forEach((operator) => {
