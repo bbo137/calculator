@@ -37,11 +37,21 @@
     
 }
 
+.button-pressed{
+    height: 60px;
+    width: 60px;
+    margin: 6px;
+    box-sizing: border-box;
+    transition: all 0.25s;
+    background-color: red;
+}
+
 .button{
     height: 60px;
     width: 60px;
     margin: 6px;
     box-sizing: border-box;
+    transition: all 0.25s;
 }
 
 .pressed{

@@ -8,11 +8,14 @@ function display(input) {
   const output = document.querySelector(".output");
   outputLen = input.toString().length;
   if (outputLen > 9) {
-    if (input >= 10e99 || input <= 10e-9) {
+    if (input >= 10e99 || input <= 10e-4) {
+      console.log(`1`);
       input = Number(input).toPrecision(4);
-    } else if (input >= 10e9 || input <= -10e-9) {
+    } else if (input >= 10e9) {
+      console.log(`2`);
       input = Number(input).toPrecision(4);
-    } else if (input >= 10e8 || input <= -10e-8) {
+    } else if (input >= 10e8 || input <= 10e-3) {
+      console.log(`3`);
       input = Number(input).toPrecision(5);
     } else {
       input = Number(input).toPrecision(9);
@@ -58,15 +61,26 @@ function operate(opperator, a, b) {
 
 function input() {
   const operands = document.querySelectorAll(".operand");
+  window.addEventListener("keydown", function (e) {
+    const operands = document.querySelector(
+      '.operand[data-key="' + e.key + '"]'
+    );
+    if (operands) executeFunction(operands);
+  });
+
   operands.forEach((operand) =>
     operand.addEventListener("click", () => {
-      if (output.length >= 9) return;
-      (output == 0 && !output.toString().includes(".")) || output == accumulator
-        ? (output = Number(operand.textContent))
-        : (output += operand.textContent);
-      display(output);
+      executeFunction(operand);
     })
   );
+
+  const executeFunction = (operand) => {
+    if (output.length >= 9) return;
+    (output == 0 && !output.toString().includes(".")) || output == accumulator
+      ? (output = Number(operand.textContent))
+      : (output += operand.textContent);
+    display(output);
+  };
 }
 
 function clear() {
@@ -86,37 +100,67 @@ function reset() {
 
 function del() {
   const del = document.querySelector(".back");
+  window.addEventListener("keydown", function (e) {
+    const del = document.querySelector('.back[data-key="' + e.key + '"]');
+    if (del) executeFunction(del);
+  });
+
   del.addEventListener("click", () => {
+    executeFunction(del);
+  });
+
+  const executeFunction = (del) => {
     if (output.length <= 1) {
       output = 0;
     } else {
       output = output.toString().slice(0, -1);
     }
     display(output);
-  });
+  };
 }
 
 function operator() {
   const operators = document.querySelectorAll(".operator");
-  window.addEventListener('keydown', function(e){
-    const operator= document.querySelector('.operator[data-key="'+e.key+'"]');
-    console.log({operator})
-    if(operator) executeFunction(operator);
+  window.addEventListener("keydown", function (e) {
+    const operator = document.querySelector(
+      '.operator[data-key="' + e.key + '"]'
+    );
+    if (operator) executeFunction(operator);
   });
 
   operators.forEach((operator) => {
     operator.addEventListener("click", () => {
-      console.log("click");
       executeFunction(operator);
     });
   });
+
   const executeFunction = (operator) => {
-    operator.setAttribute("style", "background-color: red");
+    operator.removeEventlistener;
+    operator.classList.add("button-pressed");
     output = output.toString();
     if (nextOperator == "÷" && output == 0) {
       display("lmao");
       reset();
       return;
+    }
+    const keys = document.querySelectorAll(".button");
+    keys.forEach((key) =>
+      key.addEventListener("transitionend", removeTransition)
+    );
+
+    function removeTransition(e) {
+      console.log("removetransition");
+      keys.forEach((key) => key.addEventListener("click", removeColor));
+      window.addEventListener("keydown", removeColor);
+      
+      function removeColor() {
+        console.log("removecolor");
+        operator.classList.remove("button-pressed");
+        keys.forEach((key) => key.removeEventListener("click", removeColor));
+        keys.forEach((key) =>
+          key.removeEventListener("transitionend", removeTransition));
+        window.removeEventListener("keydown", removeColor);
+      }
     }
     operate(nextOperator, accumulator, output);
     display(output);
@@ -127,30 +171,65 @@ function operator() {
 
 function decimal() {
   const decimal = document.querySelector(".decimal");
+  window.addEventListener("keydown", function (e) {
+    const decimal = document.querySelector(
+      '.decimal[data-key="' + e.key + '"]'
+    );
+    if (decimal) executeFunction();
+  });
+
   decimal.addEventListener("click", () => {
+    executeFunction();
+  });
+
+  const executeFunction = () => {
     if (!output.toString().includes(".")) {
       output += ".";
       display(output);
     }
-  });
+  };
 }
+
+//percent button
+function percent() {
+  firstPass = false;
+  const output = document.querySelector(".output");
+  const percent = document.querySelector(".percent");
+  percent.addEventListener("click", () => {
+    if (percent) executeFunction();
+  });
+
+  const executeFunction = () => {
+    const current = Number(output.textContent);
+    operate("÷", current, 100);
+    display(accumulator);
+    accumulator = current;
+  };
+}
+// +- button
+function invertSign() {
+  firstPass = false;
+  const output = document.querySelector(".output");
+  const invert = document.querySelector(".invert");
+  invert.addEventListener("click", () => {
+    if (invert) executeFunction();
+  });
+
+  const executeFunction = () => {
+    const current = Number(output.textContent);
+    operate("×", current, Number(-1));
+    display(accumulator);
+    accumulator = 0;
+  };
+}
+
+// result button
+function result() {}
 
 input();
 clear();
 del();
 operator();
 decimal();
-
-/*     currentInput = Number(output['textContent']);
-    (currentInput === 0) 
-    ? output.textContent = input 
-    : output.textContent += input;
-    console.log(currentInput === 0)  */
-
-/*     operands.forEach((operand) =>
-    operand.addEventListener("click", () => {
-        auxNumber += operand.textContent;
-        display(auxNumber);
-    
-    })
-  ); */
+percent();
+invertSign();
