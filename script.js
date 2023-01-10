@@ -132,12 +132,12 @@ function operator() {
   });
 
   const executeFunction = (operator) => {
-    operator.removeEventlistener;
-    operator.classList.add("button-pressed");
+    operator.classList.add("operator-pressed");
     output = output.toString();
     if (nextOperator == "÷" && output == 0) {
       display("lmao");
       reset();
+      operator.classList.remove("operator-pressed");
       return;
     }
     const keys = document.querySelectorAll(".button");
@@ -146,14 +146,20 @@ function operator() {
     );
 
     function removeTransition(e) {
-      keys.forEach((key) => key.addEventListener("click", removeColor));
+      keys.forEach((key) => {
+        if (operator != key) {
+          key.addEventListener("click", removeColor);
+        }
+      });
       window.addEventListener("keydown", removeColor);
-      
-      function removeColor() {
-        operator.classList.remove("button-pressed");
+
+      function removeColor(e) {
+        if (e.key == operator.value) return;
+        operator.classList.remove("operator-pressed");
         keys.forEach((key) => key.removeEventListener("click", removeColor));
         keys.forEach((key) =>
-          key.removeEventListener("transitionend", removeTransition));
+          key.removeEventListener("transitionend", removeTransition)
+        );
         window.removeEventListener("keydown", removeColor);
       }
     }
@@ -219,7 +225,53 @@ function invertSign() {
 }
 
 // result button
-function result() {}
+function result() {
+  const result = document.querySelector(".result");
+  result.addEventListener("click", () => {
+    executeFunction();
+  });
+  window.addEventListener("keydown", (e) => {
+    if (e.key == "Enter") {
+      executeFunction();
+    }
+  });
+
+  function executeFunction() {
+    if(nextOperator == "") return;
+    const output = document.querySelector(".output");
+    const current = Number(output.textContent);
+    const aux = accumulator;
+    console.log(current)
+    operate(nextOperator,accumulator,current);
+    display(accumulator);
+    nextOperator = "";
+  }
+}
+
+function animateButtons(){
+  const buttons = document.querySelectorAll(".button:not(.operator)");
+  buttons.forEach((button)=> button.addEventListener("click", ()=>{
+    button.classList.add("button-pressed");
+  }));
+  buttons.forEach((button)=> button.addEventListener("transitionend", removeTransition));
+
+  window.addEventListener("keydown", function (e) {
+    const button = document.querySelector(
+      '.button[data-key="' + e.key + '"]:not(.operator)'
+    );
+    if (button) {
+      button.classList.add("button-pressed");
+    };
+  });
+
+  function removeTransition(e, button){
+    console.log(e)
+    buttons.forEach((button) => {
+      button.classList.remove("button-pressed")
+    });
+
+  }
+}
 
 input();
 clear();
@@ -228,3 +280,5 @@ operator();
 decimal();
 percent();
 invertSign();
+result();
+animateButtons()
