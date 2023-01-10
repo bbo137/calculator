@@ -9,13 +9,10 @@ function display(input) {
   outputLen = input.toString().length;
   if (outputLen > 9) {
     if (input >= 10e99 || input <= 10e-4) {
-      console.log(`1`);
       input = Number(input).toPrecision(4);
     } else if (input >= 10e9) {
-      console.log(`2`);
       input = Number(input).toPrecision(4);
     } else if (input >= 10e8 || input <= 10e-3) {
-      console.log(`3`);
       input = Number(input).toPrecision(5);
     } else {
       input = Number(input).toPrecision(9);
@@ -149,12 +146,10 @@ function operator() {
     );
 
     function removeTransition(e) {
-      console.log("removetransition");
       keys.forEach((key) => key.addEventListener("click", removeColor));
       window.addEventListener("keydown", removeColor);
       
       function removeColor() {
-        console.log("removecolor");
         operator.classList.remove("button-pressed");
         keys.forEach((key) => key.removeEventListener("click", removeColor));
         keys.forEach((key) =>
