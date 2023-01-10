@@ -226,22 +226,28 @@ function invertSign() {
 
 // result button
 function result() {
+  
   const result = document.querySelector(".result");
   result.addEventListener("click", () => {
+    const output = document.querySelector(".output");
     executeFunction();
   });
   window.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
+      const output = document.querySelector(".output");
       executeFunction();
     }
   });
 
   function executeFunction() {
+    if (nextOperator == "÷" && output == 0) {
+      display("lmao");
+      reset();
+      return;
+    }
     if(nextOperator == "") return;
-    const output = document.querySelector(".output");
     const current = Number(output.textContent);
     const aux = accumulator;
-    console.log(current)
     operate(nextOperator,accumulator,current);
     display(accumulator);
     nextOperator = "";
@@ -265,7 +271,6 @@ function animateButtons(){
   });
 
   function removeTransition(e, button){
-    console.log(e)
     buttons.forEach((button) => {
       button.classList.remove("button-pressed")
     });
