@@ -44,7 +44,7 @@ function operate(operator, a, b) {
       accumulator = multiply(a, b);
       output = accumulator;
       break;
-    case "÷": 
+    case "÷":
       !firstPass, () => (a = 1);
       accumulator = divide(a, b);
       output = accumulator;
@@ -237,7 +237,7 @@ function result() {
   });
 
   function executeFunction() {
-    if(nextOperator == "") return;
+    if (nextOperator == "") return;
     output = output.toString();
     if (nextOperator == "÷" && output == 0) {
       display("lmao");
@@ -251,12 +251,16 @@ function result() {
   }
 }
 
-function animateButtons(){
+function animateButtons() {
   const buttons = document.querySelectorAll(".button:not(.operator)");
-  buttons.forEach((button)=> button.addEventListener("click", ()=>{
-    button.classList.add("button-pressed");
-  }));
-  buttons.forEach((button)=> button.addEventListener("transitionend", removeTransition));
+  buttons.forEach((button) =>
+    button.addEventListener("click", () => {
+      button.classList.add("button-pressed");
+    })
+  );
+  buttons.forEach((button) =>
+    button.addEventListener("transitionend", removeTransition)
+  );
 
   window.addEventListener("keydown", function (e) {
     const button = document.querySelector(
@@ -264,14 +268,13 @@ function animateButtons(){
     );
     if (button) {
       button.classList.add("button-pressed");
-    };
+    }
   });
 
-  function removeTransition(e, button){
+  function removeTransition(e, button) {
     buttons.forEach((button) => {
-      button.classList.remove("button-pressed")
+      button.classList.remove("button-pressed");
     });
-
   }
 }
 
@@ -283,4 +286,4 @@ decimal();
 percent();
 invertSign();
 result();
-animateButtons()
+animateButtons();
