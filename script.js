@@ -1,7 +1,7 @@
 var output = document.querySelector(".output").textContent;
 let accumulator = "0";
 let aux = 0;
-firstPass = false;
+firstPass = true;
 nextOperator = "+";
 
 function display(input) {
@@ -29,12 +29,11 @@ const multiply = (a, b) => a * b;
 
 const divide = (a, b) => a / b;
 
-function operate(opperator, a, b) {
-  switch (opperator) {
+function operate(operator, a, b) {
+  switch (operator) {
     case "+":
       accumulator = add(a, b);
       output = accumulator;
-
       break;
     case "-":
       accumulator = subtract(a, b);
@@ -45,7 +44,7 @@ function operate(opperator, a, b) {
       accumulator = multiply(a, b);
       output = accumulator;
       break;
-    case "÷":
+    case "÷": 
       !firstPass, () => (a = 1);
       accumulator = divide(a, b);
       output = accumulator;
@@ -226,37 +225,29 @@ function invertSign() {
 
 // result button
 function result() {
-  
   const result = document.querySelector(".result");
+
   result.addEventListener("click", () => {
-    const output = document.querySelector(".output");
     executeFunction();
   });
   window.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
-      const output = document.querySelector(".output");
       executeFunction();
     }
   });
 
   function executeFunction() {
-
+    if(nextOperator == "") return;
+    output = output.toString();
     if (nextOperator == "÷" && output == 0) {
       display("lmao");
       reset();
       return;
     }
-    if(nextOperator == "") return;
-    const output = document.querySelector(".output");
-    const current = output.textContent;
-    const aux = accumulator;
-    console.log(accumulator);
-    console.log(nextOperator);
-    console.log(current);
-    
-    operate(nextOperator,accumulator,current);
-    display(accumulator);
-    nextOperator = "";
+    operate(nextOperator, accumulator, output);
+    display(output);
+    nextOperator = operator.textContent;
+    firstPass = false;
   }
 }
 
