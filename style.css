@@ -36,6 +36,7 @@
   text-align: end;
   font-weight: 500;
   font-size: 40px;
+  font-family: 'Courier New', Courier, monospace;
   text-shadow: rgb(97, 96, 93) 1px 0 10px;
 }
 
@@ -52,6 +53,7 @@
   background-color: #63aa9c;
   border: solid 3px #e3e1c8;
   box-shadow: 2px 2px 2px #ff2321;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .result{
