@@ -240,14 +240,20 @@ function result() {
   });
 
   function executeFunction() {
+
     if (nextOperator == "÷" && output == 0) {
       display("lmao");
       reset();
       return;
     }
     if(nextOperator == "") return;
-    const current = Number(output.textContent);
+    const output = document.querySelector(".output");
+    const current = output.textContent;
     const aux = accumulator;
+    console.log(accumulator);
+    console.log(nextOperator);
+    console.log(current);
+    
     operate(nextOperator,accumulator,current);
     display(accumulator);
     nextOperator = "";
