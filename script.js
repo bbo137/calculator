@@ -106,9 +106,11 @@ function del() {
   });
 
   const executeFunction = (del) => {
-    if (output.length <= 1) {
+    console.log(output.length)
+    if (output.length < 2 || !output.length) {
       output = 0;
     } else {
+      console.log('hi')
       output = output.toString().slice(0, -1);
     }
     display(output);
